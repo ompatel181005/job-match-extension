@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Job Match</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main>
+      <header>
+        <p class="eyebrow">JOB MATCH</p>
+        <h1>Read the requirements first.</h1>
+        <p class="lede">Capture this posting or paste its text. Resume ranking comes next.</p>
+      </header>
+
+      <button id="capture" class="primary">Analyze active job page</button>
+      <div class="divider"><span>or paste text</span></div>
+      <label for="jobText">Job description</label>
+      <textarea id="jobText" rows="8" placeholder="Paste the complete job description…"></textarea>
+      <button id="analyzePaste" class="secondary">Analyze pasted description</button>
+
+      <p id="status" role="status" aria-live="polite"></p>
+      <section id="results" hidden>
+        <div class="result-heading">
+          <h2>Ranked resume bases</h2>
+          <span id="matchCount" class="count"></span>
+        </div>
+        <ol id="matches"></ol>
+        <div class="result-heading">
+          <h2>Requirements</h2>
+          <span id="count" class="count"></span>
+        </div>
+        <ol id="requirements"></ol>
+      </section>
+      <a class="settings" href="options.html" target="_blank">Backend settings</a>
+    </main>
+    <script src="sidepanel.js"></script>
+  </body>
+</html>

@@ -1,0 +1,46 @@
+{
+  "requirements": [
+    {
+      "id": "req-python-api",
+      "text": "Build production Python APIs",
+      "keywords": ["Python", "FastAPI"],
+      "kind": "framework",
+      "priority": "required",
+      "weight": 3
+    },
+    {
+      "id": "req-ci",
+      "text": "Experience with continuous integration",
+      "keywords": ["continuous integration"],
+      "kind": "concept",
+      "priority": "preferred",
+      "weight": 1
+    }
+  ],
+  "resumes": [
+    {
+      "id": "backend-base",
+      "name": "Backend Engineering Base",
+      "role_family": "backend",
+      "evidence": [
+        {
+          "id": "backend-bullet-1",
+          "section": "experience",
+          "text": "Built and deployed Python APIs with FastAPI and CI/CD checks."
+        }
+      ]
+    },
+    {
+      "id": "general-base",
+      "name": "General Software Base",
+      "role_family": "software",
+      "evidence": [
+        {
+          "id": "general-skills-1",
+          "section": "skills",
+          "text": "Languages: Python. Frameworks: FastAPI."
+        }
+      ]
+    }
+  ]
+}

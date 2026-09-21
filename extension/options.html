@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Job Match settings</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="options">
+      <p class="eyebrow">JOB MATCH</p>
+      <h1>Backend settings</h1>
+      <label for="apiUrl">Backend URL</label>
+      <input id="apiUrl" type="url" value="http://localhost:8000" />
+      <label for="bearerToken">Bearer token</label>
+      <input id="bearerToken" type="password" autocomplete="off" />
+      <p class="hint">The Gemini key belongs in the backend environment, never here.</p>
+      <button id="save" class="primary">Save settings</button>
+      <p id="status" role="status" aria-live="polite"></p>
+    </main>
+    <script src="options.js"></script>
+  </body>
+</html>
