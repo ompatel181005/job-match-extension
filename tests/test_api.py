@@ -96,3 +96,31 @@ def test_rank_job_uses_local_library(tmp_path, monkeypatch) -> None:
     payload = response.json()
     assert payload["ranking"]["matches"][0]["resume_id"] == "backend"
     assert payload["ranking"]["matches"][0]["score"] == 100
+
+
+def test_resume_import_is_idempotent_and_listed(tmp_path, monkeypatch) -> None:
+    database_path = tmp_path / "job_matcher.db"
+    monkeypatch.setenv("JOB_MATCHER_DATABASE_PATH", str(database_path))
+    resume = {
+        "id": "backend",
+        "name": "Backend Base",
+        "role_family": "backend",
+        "markdown": "## Experience\n- Built Python APIs.\n## Skills\nPython, FastAPI",
+    }
+
+    first = client.post("/v1/resumes/import", json=resume)
+    repeated = client.post("/v1/resumes/import", json=resume)
+    resume["markdown"] += "\nSQL"
+    updated = client.post("/v1/resumes/import", json=resume)
+    listed = client.get("/v1/resumes")
+
+    assert first.status_code == 200
+    assert first.json()["changed"] is True
+    assert first.json()["version"] == 1
+    assert repeated.json()["changed"] is False
+    assert repeated.json()["version"] == 1
+    assert updated.json()["changed"] is True
+    assert updated.json()["version"] == 2
+    assert listed.status_code == 200
+    assert listed.json()[0]["id"] == "backend"
+    assert listed.json()[0]["version_count"] == 2

@@ -18,6 +18,7 @@ The repository now contains the first backend vertical slice:
 - a Chrome MV3 side panel with Greenhouse, Lever, and paste-text capture;
 - a resume.lol MCP sync for nine canonical role-family bases;
 - a library-backed job endpoint that extracts requirements and ranks those bases;
+- idempotent SQLite resume imports with content-digest version history;
 - unit tests for ranking and evidence placement.
 
 The supplied source plan is preserved in
@@ -37,6 +38,10 @@ uvicorn job_matcher.main:app --reload
 ```
 
 API documentation is then available at `http://localhost:8000/docs`.
+
+Private Markdown can be imported into the local versioned library through
+`POST /v1/resumes/import` and summarized through `GET /v1/resumes`. The
+default SQLite file is `data/job_matcher.db`, which is ignored by Git.
 
 To refresh the private resume library from resume.lol:
 

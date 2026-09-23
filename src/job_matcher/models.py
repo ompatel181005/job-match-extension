@@ -90,6 +90,25 @@ class MarkdownResumeRequest(BaseModel):
     markdown: str = Field(min_length=1, max_length=200_000)
 
 
+class ResumeImportResult(BaseModel):
+    id: str
+    name: str
+    role_family: str | None
+    digest: str
+    version: int = Field(ge=1)
+    evidence_count: int = Field(ge=1)
+    changed: bool
+
+
+class ResumeSummary(BaseModel):
+    id: str
+    name: str
+    role_family: str | None
+    current_digest: str
+    version_count: int = Field(ge=1)
+    updated_at: str
+
+
 class JobExtractRequest(BaseModel):
     text: str = Field(min_length=1, max_length=100_000)
     title: str | None = Field(default=None, max_length=300)

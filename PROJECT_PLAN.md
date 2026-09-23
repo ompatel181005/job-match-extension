@@ -112,9 +112,10 @@ Exit: the scoring engine is reproducible locally and its behavior is tested.
 
 ### Phase 0B — persistence and extraction (September 23–27)
 
-- Add SQLite models and migrations for resumes, bullets, jobs, requirements,
+- [x] Add SQLite models and migrations for resume versions.
+- [x] Add idempotent Markdown resume imports with content hashes.
+- Add SQLite models and migrations for bullets, jobs, requirements,
   and runs.
-- Add folder-based Markdown ingestion with content hashes and idempotent updates.
 - Implement Gemini structured requirement extraction behind a provider interface.
 - Validate model output, retry only safe transient errors, and provide a
   deterministic fixture/offline provider.

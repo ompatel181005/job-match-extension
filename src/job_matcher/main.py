@@ -15,8 +15,11 @@ from job_matcher.models import (
     RankRequest,
     RankResponse,
     ResumeDocument,
+    ResumeImportResult,
+    ResumeSummary,
 )
 from job_matcher.scoring import rank_resumes
+from job_matcher.storage import import_resume, list_resumes
 
 app = FastAPI(
     title="Job Matcher API",
@@ -57,3 +60,15 @@ def rank_job(request: JobExtractRequest) -> JobRankResponse:
 @app.post("/v1/resumes/parse-markdown", response_model=ResumeDocument)
 def parse_resume(request: MarkdownResumeRequest) -> ResumeDocument:
     return parse_markdown_resume(request)
+
+
+@app.post("/v1/resumes/import", response_model=ResumeImportResult)
+def import_resume_endpoint(request: MarkdownResumeRequest) -> ResumeImportResult:
+    database_path = Path(os.environ.get("JOB_MATCHER_DATABASE_PATH", "data/job_matcher.db"))
+    return import_resume(database_path, request)
+
+
+@app.get("/v1/resumes", response_model=list[ResumeSummary])
+def list_resumes_endpoint() -> list[ResumeSummary]:
+    database_path = Path(os.environ.get("JOB_MATCHER_DATABASE_PATH", "data/job_matcher.db"))
+    return list_resumes(database_path)
