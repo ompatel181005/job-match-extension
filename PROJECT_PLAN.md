@@ -1,6 +1,6 @@
 # Job Match Extension — Delivery Plan
 
-Last updated: September 20, 2026
+Last updated: September 24, 2026
 
 ## 1. Product outcome
 
@@ -116,8 +116,8 @@ Exit: the scoring engine is reproducible locally and its behavior is tested.
 - [x] Add idempotent Markdown resume imports with content hashes.
 - Add SQLite models and migrations for bullets, jobs, requirements,
   and runs.
-- Implement Gemini structured requirement extraction behind a provider interface.
-- Validate model output, retry only safe transient errors, and provide a
+- [x] Implement Gemini structured requirement extraction with an offline fallback.
+- [x] Validate model output, retry only safe transient errors, and provide a
   deterministic fixture/offline provider.
 - Cache extraction by normalized job-text hash.
 - Add API authentication middleware and request-size limits.
@@ -148,7 +148,8 @@ Exit: the panel recommends what to change and can explain every recommendation.
 ### Phase 1B — quality and broader coverage (October 12–18)
 
 - Add PDF parse checks for identity, headings, bullets, dates, and broken glyphs.
-- Add LinkedIn route-change/expanded-description handling and an Ashby adapter.
+- Add LinkedIn route-change/expanded-description handling.
+- [x] Add an Ashby adapter with structured JobPosting extraction.
 - Add observability for latency, cache hit rate, extraction failures, and token
   use without logging sensitive resume or job text.
 - Add accessibility, keyboard navigation, reduced-motion, and empty states.

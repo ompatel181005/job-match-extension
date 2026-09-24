@@ -14,6 +14,7 @@ The repository now contains the first backend vertical slice:
 - experience/project evidence weighted above skills-only evidence;
 - close-score handling that avoids false precision;
 - deterministic offline extraction for an initial technical requirement set;
+- optional Gemini structured extraction with validated output and offline fallback;
 - Markdown resume parsing into stable, section-aware evidence records;
 - a Chrome MV3 side panel with Greenhouse, Lever, generic active-page, and paste-text capture;
 - a resume.lol MCP sync for nine canonical role-family bases;
@@ -42,6 +43,10 @@ API documentation is then available at `http://localhost:8005/docs`.
 The backend accepts browser requests from the unpacked extension ID recorded in
 `JOB_MATCHER_EXTENSION_ORIGIN`. Update that value if Chrome assigns a different
 ID on another machine.
+
+For broader requirement reasoning, copy `.env.example` to the ignored `.env`
+file and set `GEMINI_API_KEY`. The backend uses `gemini-2.5-flash` by default
+and falls back to deterministic local extraction if the model is unavailable.
 
 Private Markdown can be imported into the local versioned library through
 `POST /v1/resumes/import` and summarized through `GET /v1/resumes`. The
@@ -75,7 +80,7 @@ history. Use `.env` and `data/private/` for local-only material.
 1. Start the backend at `http://localhost:8005`.
 2. Open `chrome://extensions`, enable Developer mode, and choose **Load unpacked**.
 3. Select this repository's `extension/` directory.
-4. Open a Greenhouse or Lever posting and click the extension action, or paste a
+4. Open a Greenhouse, Lever, or Ashby posting and click the extension action, or paste a
    job description in the side panel.
 
 The panel ranks the locally synced resume bases and shows extracted

@@ -1,6 +1,7 @@
 import os
 from pathlib import Path
 
+from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -21,6 +22,8 @@ from job_matcher.models import (
 )
 from job_matcher.scoring import rank_resumes
 from job_matcher.storage import import_resume, list_resumes
+
+load_dotenv()
 
 app = FastAPI(
     title="Job Matcher API",

@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Job Match",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "Compare a job posting with your resume-base library.",
   "minimum_chrome_version": "114",
   "permissions": ["activeTab", "scripting", "sidePanel", "storage"],
@@ -22,7 +22,8 @@
       "matches": [
         "https://boards.greenhouse.io/*",
         "https://job-boards.greenhouse.io/*",
-        "https://jobs.lever.co/*"
+        "https://jobs.lever.co/*",
+        "https://jobs.ashbyhq.com/*"
       ],
       "js": ["content-script.js"],
       "run_at": "document_idle"

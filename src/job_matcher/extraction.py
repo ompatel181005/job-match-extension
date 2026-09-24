@@ -1,6 +1,8 @@
 import hashlib
+import os
 import re
 
+from job_matcher.gemini import GeminiExtractionError, extract_requirements_with_gemini
 from job_matcher.models import (
     JobExtractRequest,
     JobExtractResponse,
@@ -9,8 +11,9 @@ from job_matcher.models import (
 )
 from job_matcher.scoring import normalize
 
-EXTRACTOR_VERSION = "deterministic-v1"
+EXTRACTOR_VERSION = "deterministic-v2"
 SENTENCE_PATTERN = re.compile(r"(?<=[.!?])\s+|\n+")
+WRAPPED_LINE_PATTERN = re.compile(r"(?<![.!?:])\n(?=[a-z])")
 
 # Seeded from JobFit's vocabulary, then grouped so aliases become one requirement.
 SKILL_GROUPS: tuple[tuple[str, ...], ...] = (
@@ -45,6 +48,18 @@ SKILL_GROUPS: tuple[tuple[str, ...], ...] = (
     ("pytorch",),
     ("tensorflow",),
     ("scikit-learn", "sklearn"),
+    ("machine learning", "ml"),
+    ("deep learning",),
+    ("generative ai", "generative artificial intelligence"),
+    ("foundation models", "foundation model"),
+    ("diffusion models", "diffusion model"),
+    ("large language models", "large language model", "llm", "llms"),
+    ("reinforcement learning", "rl"),
+    ("multimodal", "multi-modal"),
+    ("embeddings", "embedding", "vector embeddings", "vector embedding"),
+    ("computational chemistry",),
+    ("biochemistry",),
+    ("drug discovery",),
     ("computer vision", "cv"),
     ("model context protocol", "mcp"),
     ("rest", "restful"),
@@ -83,8 +98,9 @@ def _requirement_id(canonical: str) -> str:
     return f"req-{normalize(canonical).replace(' ', '-')}-{digest}"
 
 
-def extract_requirements(request: JobExtractRequest) -> JobExtractResponse:
-    sentences = [part.strip(" -•\t") for part in SENTENCE_PATTERN.split(request.text)]
+def _extract_requirements_offline(request: JobExtractRequest) -> JobExtractResponse:
+    text = WRAPPED_LINE_PATTERN.sub(" ", request.text)
+    sentences = [part.strip(" -•\t") for part in SENTENCE_PATTERN.split(text)]
     sentences = [sentence for sentence in sentences if sentence]
     requirements: list[Requirement] = []
 
@@ -121,3 +137,17 @@ def extract_requirements(request: JobExtractRequest) -> JobExtractResponse:
         extractor_version=EXTRACTOR_VERSION,
         warnings=warnings,
     )
+
+
+def extract_requirements(request: JobExtractRequest) -> JobExtractResponse:
+    api_key = os.environ.get("GEMINI_API_KEY", "").strip()
+    if not api_key:
+        return _extract_requirements_offline(request)
+
+    model = os.environ.get("GEMINI_MODEL", "gemini-2.5-flash").strip()
+    try:
+        return extract_requirements_with_gemini(request, api_key=api_key, model=model)
+    except GeminiExtractionError:
+        fallback = _extract_requirements_offline(request)
+        fallback.warnings.insert(0, "AI extraction failed; used the offline extractor.")
+        return fallback

@@ -67,6 +67,24 @@ def test_synonyms_match_and_missing_requirement_is_reported() -> None:
     assert match.missing_requirement_ids == ["cloud"]
 
 
+def test_ml_abbreviation_matches_full_requirement() -> None:
+    requirement = Requirement(
+        id="language-models",
+        text="Experience with large language models",
+        keywords=["large language models"],
+    )
+    resume = ResumeDocument(
+        id="ai",
+        name="AI Base",
+        evidence=[evidence("b1", EvidenceSection.PROJECT, "Built an LLM evaluation system.")],
+    )
+
+    match = rank_resumes(RankRequest(requirements=[requirement], resumes=[resume])).matches[0]
+
+    assert match.score == 100
+    assert match.coverage[0].matched_keywords == ["large language models"]
+
+
 def test_top_scores_within_threshold_are_marked_close() -> None:
     requirements = [Requirement(id="python", text="Python", keywords=["Python"])]
     first = ResumeDocument(
