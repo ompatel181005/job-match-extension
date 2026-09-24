@@ -49,9 +49,10 @@ async function activeJob() {
         files: ["content-script.js"],
       });
       response = await chrome.tabs.sendMessage(tab.id, { type: "EXTRACT_JOB_PAGE" });
-    } catch {
+    } catch (injectionError) {
+      const reason = injectionError?.message || String(injectionError);
       throw new Error(
-        "Chrome cannot read this page. Refresh a normal job page and try again, or paste the description.",
+        `Chrome could not inject the page reader: ${reason}. Reload the extension and refresh the job page.`,
       );
     }
   }
