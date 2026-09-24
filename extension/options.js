@@ -3,7 +3,10 @@ const bearerToken = document.getElementById("bearerToken");
 const status = document.getElementById("status");
 
 chrome.storage.local.get(["apiUrl", "bearerToken"]).then((stored) => {
-  apiUrl.value = stored.apiUrl || "http://localhost:8000";
+  const savedUrl = (stored.apiUrl || "").replace(/\/$/, "");
+  apiUrl.value = !savedUrl || ["http://localhost:8000", "http://127.0.0.1:8000"].includes(savedUrl)
+    ? "http://localhost:8005"
+    : savedUrl;
   bearerToken.value = stored.bearerToken || "";
 });
 

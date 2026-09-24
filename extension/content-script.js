@@ -1,3 +1,4 @@
+(() => {
 const SITE_ADAPTERS = [
   {
     source: "greenhouse",
@@ -26,14 +27,27 @@ function firstText(selectors) {
 
 function extractJob() {
   const adapter = SITE_ADAPTERS.find((candidate) => candidate.hosts.has(location.hostname));
-  if (!adapter) throw new Error("This site is not supported yet. Paste the job description instead.");
-  const text = firstText(adapter.description);
+  const source = adapter?.source || "generic";
+  const titleSelectors = adapter?.title || ["h1", "main h2", "[role='main'] h2"];
+  const companySelectors = adapter?.company || [
+    "[data-company-name]",
+    ".company-name",
+    "[class*='company']",
+  ];
+  const descriptionSelectors = adapter?.description || [
+    "[data-job-description]",
+    "[class*='job-description']",
+    "main",
+    "[role='main']",
+    "article",
+  ];
+  const text = firstText(descriptionSelectors);
   if (text.length < 100) throw new Error("The job description could not be read from this page.");
   return {
-    source: adapter.source,
+    source,
     source_url: location.href,
-    title: firstText(adapter.title) || document.title,
-    company: firstText(adapter.company),
+    title: firstText(titleSelectors) || document.title,
+    company: firstText(companySelectors),
     text,
   };
 }
@@ -47,3 +61,4 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
   }
   return false;
 });
+})();

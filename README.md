@@ -15,7 +15,7 @@ The repository now contains the first backend vertical slice:
 - close-score handling that avoids false precision;
 - deterministic offline extraction for an initial technical requirement set;
 - Markdown resume parsing into stable, section-aware evidence records;
-- a Chrome MV3 side panel with Greenhouse, Lever, and paste-text capture;
+- a Chrome MV3 side panel with Greenhouse, Lever, generic active-page, and paste-text capture;
 - a resume.lol MCP sync for nine canonical role-family bases;
 - a library-backed job endpoint that extracts requirements and ranks those bases;
 - idempotent SQLite resume imports with content-digest version history;
@@ -34,10 +34,10 @@ python -m venv .venv
 source .venv/bin/activate
 python -m pip install -e '.[dev]'
 pytest
-uvicorn job_matcher.main:app --reload
+uvicorn job_matcher.main:app --reload --port 8005
 ```
 
-API documentation is then available at `http://localhost:8000/docs`.
+API documentation is then available at `http://localhost:8005/docs`.
 
 Private Markdown can be imported into the local versioned library through
 `POST /v1/resumes/import` and summarized through `GET /v1/resumes`. The
@@ -68,7 +68,7 @@ history. Use `.env` and `data/private/` for local-only material.
 
 ## Load the extension
 
-1. Start the backend at `http://localhost:8000`.
+1. Start the backend at `http://localhost:8005`.
 2. Open `chrome://extensions`, enable Developer mode, and choose **Load unpacked**.
 3. Select this repository's `extension/` directory.
 4. Open a Greenhouse or Lever posting and click the extension action, or paste a

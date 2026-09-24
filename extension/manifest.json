@@ -1,11 +1,11 @@
 {
   "manifest_version": 3,
   "name": "Job Match",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Compare a job posting with your resume-base library.",
   "minimum_chrome_version": "114",
-  "permissions": ["activeTab", "sidePanel", "storage"],
-  "host_permissions": ["http://localhost:8000/*"],
+  "permissions": ["activeTab", "scripting", "sidePanel", "storage"],
+  "host_permissions": ["http://localhost/*", "http://127.0.0.1/*"],
   "background": {
     "service_worker": "service-worker.js",
     "type": "module"

@@ -66,7 +66,7 @@ async function send(type, text = null) {
     if (!response?.ok) throw new Error(response?.error || "Analysis failed.");
     render(response);
   } catch (error) {
-    status.textContent = `${error.message} Is the backend running?`;
+    status.textContent = error.message;
   } finally {
     setBusy(false, status.textContent);
   }
