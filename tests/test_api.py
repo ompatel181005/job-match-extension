@@ -14,6 +14,22 @@ def test_health() -> None:
     assert response.json() == {"status": "ok", "version": "0.1.0"}
 
 
+def test_chrome_extension_cors_preflight() -> None:
+    origin = "chrome-extension://jefhfkhhkceplieedoffmceeglbbdfgk"
+    response = client.options(
+        "/v1/jobs/rank",
+        headers={
+            "Origin": origin,
+            "Access-Control-Request-Method": "POST",
+            "Access-Control-Request-Headers": "content-type",
+        },
+    )
+
+    assert response.status_code == 200
+    assert response.headers["access-control-allow-origin"] == origin
+    assert "POST" in response.headers["access-control-allow-methods"]
+
+
 def test_rank_endpoint() -> None:
     response = client.post(
         "/v1/matches/rank",

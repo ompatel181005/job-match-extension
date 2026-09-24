@@ -2,6 +2,7 @@ import os
 from pathlib import Path
 
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 
 from job_matcher import __version__
 from job_matcher.extraction import extract_requirements
@@ -25,6 +26,16 @@ app = FastAPI(
     title="Job Matcher API",
     version=__version__,
     description="Explainable requirement coverage and resume-base ranking.",
+)
+extension_origin = os.environ.get(
+    "JOB_MATCHER_EXTENSION_ORIGIN",
+    "chrome-extension://jefhfkhhkceplieedoffmceeglbbdfgk",
+)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[extension_origin],
+    allow_methods=["GET", "POST", "OPTIONS"],
+    allow_headers=["Authorization", "Content-Type"],
 )
 
 

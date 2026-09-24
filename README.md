@@ -39,6 +39,10 @@ uvicorn job_matcher.main:app --reload --port 8005
 
 API documentation is then available at `http://localhost:8005/docs`.
 
+The backend accepts browser requests from the unpacked extension ID recorded in
+`JOB_MATCHER_EXTENSION_ORIGIN`. Update that value if Chrome assigns a different
+ID on another machine.
+
 Private Markdown can be imported into the local versioned library through
 `POST /v1/resumes/import` and summarized through `GET /v1/resumes`. The
 default SQLite file is `data/job_matcher.db`, which is ignored by Git.
